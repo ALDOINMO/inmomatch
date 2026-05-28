@@ -9,6 +9,7 @@ import { requireUser } from "@/lib/auth";
 import { ensureActiveMembership } from "@/lib/membership";
 import { calculateMatch } from "@/lib/matching-engine";
 import { prisma } from "@/lib/prisma";
+import { sendNewMatchEmail } from "@/lib/email";
 import { normalizeAddress } from "@/lib/utils";
 
 import { propertySchema } from "@/validators/property";
@@ -386,36 +387,56 @@ export async function recomputeMatchesForProperty(
           },
         });
 
-      await prisma.notification.create(
-        {
-          data: {
-            realEstateId:
-              client.realEstateId,
+      await prisma.notification.create({
+  data: {
+    realEstateId:
+      client.realEstateId,
 
-            type:
-              "NEW_MATCH",
+    type: "NEW_MATCH",
 
-            title:
-              "Nuevo match encontrado",
+    title:
+      "Nuevo match encontrado",
 
-            body: `${property.title} coincide con ${client.firstName} ${client.lastName} (${result.score}%)`,
+    body: `${property.title} coincide con ${client.firstName} ${client.lastName} (${result.score}%)`,
 
-            metadata: {
-              matchId:
-                match.id,
+    metadata: {
+      matchId: match.id,
+      propertyId: property.id,
+      clientId: client.id,
+      score: result.score,
+    },
+  },
+});
 
-              propertyId:
-                property.id,
+if (result.score >= 90) {
+  const users =
+    await prisma.user.findMany({
+      where: {
+        realEstateId:
+          client.realEstateId,
+      },
 
-              clientId:
-                client.id,
+      select: {
+        email: true,
+      },
+    });
 
-              score:
-                result.score,
-            },
-          },
-        }
-      );
+  for (const user of users) {
+    await sendNewMatchEmail({
+      to: user.email,
+
+      score: result.score,
+
+      clientName:
+        `${client.firstName} ${client.lastName}`,
+
+      propertyTitle:
+        property.title,
+
+      matchId: match.id,
+    });
+  }
+}
     }
   }
 }

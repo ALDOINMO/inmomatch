@@ -31,7 +31,11 @@ function getScoreColor(score: number) {
   return "border-red-500/40 bg-red-500/10 text-red-400";
 }
 
-function getStatus(match: any) {
+function getStatus(
+  match: {
+    status: string;
+  }
+) {
   switch (match.status) {
     case "PROPOSED":
       return {
@@ -358,11 +362,13 @@ export default async function MatchesPage() {
                   "PROPOSED" ? (
                     <>
                       <form
-                        action={acceptMatchAction.bind(
-                          null,
-                          match.id
-                        )}
-                      >
+  action={async () => {
+    "use server";
+    await acceptMatchAction(
+      match.id
+    );
+  }}
+>
                         <Button
                           variant="secondary"
                           className="w-full"
@@ -372,11 +378,13 @@ export default async function MatchesPage() {
                       </form>
 
                       <form
-                        action={rejectHighMatchAction.bind(
-                          null,
-                          match.id
-                        )}
-                      >
+  action={async () => {
+    "use server";
+    await rejectHighMatchAction(
+      match.id
+    );
+  }}
+>
                         <Button
                           variant="danger"
                           className="w-full"

@@ -1,5 +1,6 @@
 "use server";
 
+import { sendNewMatchEmail } from "@/lib/email";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -353,36 +354,56 @@ export async function recomputeMatchesForClient(
           },
         });
 
-      await prisma.notification.create(
-        {
-          data: {
-            realEstateId:
-              property.realEstateId,
+      await prisma.notification.create({
+  data: {
+    realEstateId:
+      property.realEstateId,
 
-            type:
-              "NEW_MATCH",
+    type: "NEW_MATCH",
 
-            title:
-              "Nuevo match encontrado",
+    title:
+      "Nuevo match encontrado",
 
-            body: `${client.firstName} ${client.lastName} coincide con ${property.title} (${result.score}%)`,
+    body: `${client.firstName} ${client.lastName} coincide con ${property.title} (${result.score}%)`,
 
-            metadata: {
-              matchId:
-                match.id,
+    metadata: {
+      matchId: match.id,
+      propertyId: property.id,
+      clientId: client.id,
+      score: result.score,
+    },
+  },
+});
 
-              propertyId:
-                property.id,
+if (result.score >= 90) {
+  const users =
+    await prisma.user.findMany({
+      where: {
+        realEstateId:
+          property.realEstateId,
+      },
 
-              clientId:
-                client.id,
+      select: {
+        email: true,
+      },
+    });
 
-              score:
-                result.score,
-            },
-          },
-        }
-      );
+  for (const user of users) {
+    await sendNewMatchEmail({
+      to: user.email,
+
+      score: result.score,
+
+      clientName:
+        `${client.firstName} ${client.lastName}`,
+
+      propertyTitle:
+        property.title,
+
+      matchId: match.id,
+    });
+  }
+}
     }
   }
 }

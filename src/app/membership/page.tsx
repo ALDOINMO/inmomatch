@@ -1,6 +1,6 @@
 import { AppShell } from "@/components/app-shell";
 
-import { Button } from "@/components/ui/button";
+
 import { Card } from "@/components/ui/card";
 
 import { PayMembershipButton } from "@/components/pay-membership-button";
