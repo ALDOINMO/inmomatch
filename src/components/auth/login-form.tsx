@@ -26,12 +26,12 @@ export function LoginForm() {
       }))}
     >
       <Field label="Email" error={form.formState.errors.email?.message}><Input type="email" {...form.register("email")} /></Field>
-      <Field label="Contrasena" error={form.formState.errors.password?.message}><Input type="password" {...form.register("password")} /></Field>
+      <Field label="Contraseña" error={form.formState.errors.password?.message}><Input type="password" {...form.register("password")} /></Field>
       {error ? <p className="rounded-md border border-danger/40 bg-danger/10 p-3 text-sm text-danger">{error}</p> : null}
       <Button disabled={pending}>{pending ? "Ingresando..." : "Ingresar"}</Button>
       <div className="flex justify-between text-sm text-muted">
         <Link href="/register">Crear cuenta</Link>
-        <Link href="/reset-password">Recuperar contrasena</Link>
+        <Link href="/reset-password">Recuperar contraseña</Link>
       </div>
     </form>
   );
