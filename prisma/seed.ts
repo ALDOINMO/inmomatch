@@ -38,12 +38,15 @@ async function main() {
   await prisma.realEstate.update({ where: { id: realEstate.id }, data: { ownerId: admin.id } });
 
   const property = await prisma.property.upsert({
-    where: { realEstateId_cadastralId: { realEstateId: realEstate.id, cadastralId: "VR-E-29" } },
+    where: {
+  id: "seed-property",
+},
     update: {},
     create: {
       realEstateId: realEstate.id,
       createdById: admin.id,
       cadastralId: "VR-E-29",
+      id: "seed-property",
       title: "Casa moderna con vista al lago",
       type: PropertyType.CASA,
       price: 145000,
