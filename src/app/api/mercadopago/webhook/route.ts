@@ -1,4 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
+import {
+  NextRequest,
+  NextResponse,
+} from "next/server";
 
 import MercadoPagoConfig, {
   Payment,
@@ -75,7 +78,7 @@ export async function POST(
     const currentDate =
       new Date();
 
-    const expiresAt =
+    const activeUntil =
       new Date(
         currentDate.getTime() +
           30 *
@@ -95,7 +98,7 @@ export async function POST(
           status: "ACTIVE",
 
           membershipExpiresAt:
-            expiresAt,
+            activeUntil,
         },
       }
     );
@@ -105,21 +108,14 @@ export async function POST(
         data: {
           realEstateId,
 
-          amount: 25000,
+          plan: "BASE",
 
-          currency: "ARS",
+          activeUntil,
 
-          provider:
-            "MERCADOPAGO",
+          seats: 5,
 
-          providerReference:
-            String(
-              paymentData.id
-            ),
-
-          status: "APPROVED",
-
-          expiresAt,
+          notes:
+            "Pago aprobado MercadoPago",
         },
       }
     );
