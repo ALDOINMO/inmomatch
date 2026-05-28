@@ -70,6 +70,8 @@ export async function POST() {
         body: {
           items: [
             {
+              id: "membership",
+
               title:
                 "Membresía InmoMatch",
 
@@ -86,7 +88,7 @@ export async function POST() {
             user.realEstateId,
 
           notification_url:
-             "https://inmomatch-41hf.vercel.app/api/mercadopago/webhook",
+            "https://inmomatch-41hf.vercel.app/api/mercadopago/webhook",
         },
       });
 
