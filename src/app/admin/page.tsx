@@ -1,4 +1,3 @@
-export const dynamic = "force-dynamic";
 import {
   approveRealEstateAction,
   extendMembershipAction,
@@ -6,6 +5,7 @@ import {
 } from "@/actions/admin";
 
 import { AppShell } from "@/components/app-shell";
+
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
@@ -120,13 +120,10 @@ export default async function AdminPage() {
 
                   <div className="flex gap-2">
                     <form
-                      action={async () => {
-                        "use server";
-
-                        await approveRealEstateAction(
-                          item.id
-                        );
-                      }}
+                      action={approveRealEstateAction.bind(
+                        null,
+                        item.id
+                      )}
                     >
                       <Button variant="secondary">
                         Aprobar
@@ -134,13 +131,10 @@ export default async function AdminPage() {
                     </form>
 
                     <form
-                      action={async () => {
-                        "use server";
-
-                        await extendMembershipAction(
-                          item.id
-                        );
-                      }}
+                      action={extendMembershipAction.bind(
+                        null,
+                        item.id
+                      )}
                     >
                       <Button>
                         Extender 30 días
@@ -185,13 +179,10 @@ export default async function AdminPage() {
                   </div>
 
                   <form
-                    action={async () => {
-                      "use server";
-
-                      await reactivatePropertyAction(
-                        property.id
-                      );
-                    }}
+                    action={reactivatePropertyAction.bind(
+                      null,
+                      property.id
+                    )}
                   >
                     <Button variant="secondary">
                       Reactivar
