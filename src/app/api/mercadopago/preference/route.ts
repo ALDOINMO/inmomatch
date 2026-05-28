@@ -88,7 +88,7 @@ export async function POST() {
             user.realEstateId,
 
           notification_url:
-            "https://inmomatch-41hf.vercel.app/api/mercadopago/webhook",
+             "https://inmomatch-lilac.vercel.app/api/mercadopago/webhook",
         },
       });
 
