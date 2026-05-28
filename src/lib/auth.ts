@@ -1,8 +1,12 @@
 import { redirect } from "next/navigation";
 
-import { Role } from "@prisma/client";
+import {
+  AccountStatus,
+  Role,
+} from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
+
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export async function getCurrentUser() {
@@ -18,7 +22,8 @@ export async function getCurrentUser() {
 
   return prisma.user.findUnique({
     where: {
-      authUserId: data.user.id,
+      authUserId:
+        data.user.id,
     },
 
     include: {
@@ -30,15 +35,43 @@ export async function getCurrentUser() {
 export async function requireUser(
   roles?: Role[]
 ) {
-  const user = await getCurrentUser();
+  const user =
+    await getCurrentUser();
 
   if (!user) {
     redirect("/login");
   }
 
+  // Bloqueo por validación pendiente
+  if (
+    user.status ===
+      AccountStatus.PENDING_VALIDATION ||
+    user.realEstate
+      ?.status ===
+      AccountStatus.PENDING_VALIDATION
+  ) {
+    redirect(
+      "/pending-validation"
+    );
+  }
+
+  // Bloqueo por membresía suspendida
+  if (
+    user.realEstate
+      ?.status ===
+    AccountStatus.SUSPENDED
+  ) {
+    redirect(
+      "/membership-expired"
+    );
+  }
+
+  // Control de roles
   if (
     roles?.length &&
-    !roles.includes(user.role)
+    !roles.includes(
+      user.role
+    )
   ) {
     redirect("/dashboard");
   }
@@ -50,7 +83,8 @@ export function canManageRealEstate(
   role: Role
 ) {
   return (
-    role === Role.SUPER_ADMIN ||
+    role ===
+      Role.SUPER_ADMIN ||
     role ===
       Role.ADMIN_REAL_ESTATE
   );
