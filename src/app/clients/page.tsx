@@ -8,7 +8,7 @@ import { requireUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { formatMoney } from "@/lib/utils";
 
-export const dynamic = "force-dynamic";
+
 
 export default async function ClientsPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
   const user = await requireUser();

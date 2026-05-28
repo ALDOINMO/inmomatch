@@ -6,7 +6,7 @@ import { AppShell } from "@/components/app-shell";
 import { Button } from "@/components/ui/button";
 import { Card, StatCard } from "@/components/ui/card";
 
-export const dynamic = "force-dynamic";
+
 
 export default async function DashboardPage() {
   const user = await requireUser();
