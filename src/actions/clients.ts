@@ -359,7 +359,7 @@ export async function recomputeMatchesForClient(
     realEstateId:
       property.realEstateId,
 
-    type: "NEW_MATCH",
+    type: "MATCH",
 
     title:
       "Nuevo match encontrado",
