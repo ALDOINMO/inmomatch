@@ -40,6 +40,12 @@ const nav = [
     label: "Matches",
     icon: WandSparkles,
   },
+  {
+  href: "/users",
+  label: "Usuarios",
+  icon: Users,
+},
+
 ];
 
 export async function AppShell({
@@ -94,16 +100,25 @@ export async function AppShell({
         </Link>
 
         <nav className="mt-8 space-y-1">
-          {nav.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="flex items-center gap-3 rounded-md px-3 py-2 text-sm text-muted hover:bg-white/10 hover:text-foreground"
-            >
-              <item.icon size={17} />
-              {item.label}
-            </Link>
-          ))}
+  {nav
+    .filter(
+      (item) =>
+        item.href !== "/users" ||
+        user.role ===
+          Role.ADMIN_REAL_ESTATE ||
+        user.role ===
+          Role.SUPER_ADMIN
+    )
+    .map((item) => (
+      <Link
+        key={item.href}
+        href={item.href}
+        className="flex items-center gap-3 rounded-md px-3 py-2 text-sm text-muted hover:bg-white/10 hover:text-foreground"
+      >
+        <item.icon size={17} />
+        {item.label}
+      </Link>
+    ))}
 
           {user.role ===
             Role.SUPER_ADMIN && (
@@ -122,15 +137,19 @@ export async function AppShell({
         <header className="sticky top-0 z-10 border-b border-border bg-background/85 px-5 py-4 backdrop-blur md:px-8">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-muted">
-                Sesión activa
-              </p>
+  <p className="text-sm text-muted">
+    Sesión activa
+  </p>
 
-              <h1 className="font-semibold">
-                {user.firstName}{" "}
-                {user.lastName}
-              </h1>
-            </div>
+  <h1 className="font-semibold">
+    {user.role === Role.SUPER_ADMIN
+      ? "Super Administrador"
+      : user.role ===
+        Role.ADMIN_REAL_ESTATE
+      ? "Administrador"
+      : "Corredor"}
+  </h1>
+</div>
 
             <div className="flex items-center gap-3">
               <div className="relative group">
@@ -186,39 +205,68 @@ export async function AppShell({
                 </button>
 
                 <div className="absolute right-0 mt-2 hidden w-56 rounded-lg border border-border bg-background p-2 shadow-xl group-hover:block">
-                  <Link
-                    href="/account"
-                    className="block rounded-md px-3 py-2 text-sm text-muted hover:bg-white/10 hover:text-foreground"
-                  >
-                    Mi cuenta
-                  </Link>
+  <div className="border-b border-border px-3 py-2">
+    <p className="font-medium">
+      {user.firstName}{" "}
+      {user.lastName}
+    </p>
 
-                  <Link
-                    href="/membership"
-                    className="block rounded-md px-3 py-2 text-sm text-muted hover:bg-white/10 hover:text-foreground"
-                  >
-                    Membresía
-                  </Link>
+    <p className="text-xs text-muted">
+      {user.role ===
+      Role.SUPER_ADMIN
+        ? "Super Administrador"
+        : user.role ===
+          Role.ADMIN_REAL_ESTATE
+        ? "Administrador"
+        : "Corredor"}
+    </p>
+  </div>
 
-                  {user.role ===
-                    Role.SUPER_ADMIN && (
-                    <Link
-                      href="/admin"
-                      className="block rounded-md px-3 py-2 text-sm text-muted hover:bg-white/10 hover:text-foreground"
-                    >
-                      Super Admin
-                    </Link>
-                  )}
+  <Link
+    href="/account"
+    className="block rounded-md px-3 py-2 text-sm text-muted hover:bg-white/10 hover:text-foreground"
+  >
+    Mi cuenta
+  </Link>
 
-                  <form
-                    action={logoutAction}
-                    className="mt-1"
-                  >
-                    <button className="w-full rounded-md px-3 py-2 text-left text-sm text-red-400 hover:bg-red-500/10">
-                      Salir
-                    </button>
-                  </form>
-                </div>
+  {user.role ===
+    Role.ADMIN_REAL_ESTATE && (
+    <>
+      <Link
+        href="/users"
+        className="block rounded-md px-3 py-2 text-sm text-muted hover:bg-white/10 hover:text-foreground"
+      >
+        Usuarios
+      </Link>
+
+      <Link
+        href="/membership"
+        className="block rounded-md px-3 py-2 text-sm text-muted hover:bg-white/10 hover:text-foreground"
+      >
+        Membresía
+      </Link>
+    </>
+  )}
+
+  {user.role ===
+    Role.SUPER_ADMIN && (
+    <Link
+      href="/admin"
+      className="block rounded-md px-3 py-2 text-sm text-muted hover:bg-white/10 hover:text-foreground"
+    >
+      Super Admin
+    </Link>
+  )}
+
+  <form
+    action={logoutAction}
+    className="mt-1"
+  >
+    <button className="w-full rounded-md px-3 py-2 text-left text-sm text-red-400 hover:bg-red-500/10">
+      Salir
+    </button>
+  </form>
+</div>
               </div>
             </div>
           </div>

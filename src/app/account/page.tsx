@@ -61,11 +61,12 @@ export default async function AccountPage() {
                 </p>
 
                 <p className="mt-1 font-medium">
-                  {user.role.replaceAll(
-                    "_",
-                    " "
-                  )}
-                </p>
+  {user.role === "SUPER_ADMIN"
+    ? "Super Administrador"
+    : user.role === "ADMIN_REAL_ESTATE"
+    ? "Administrador"
+    : "Corredor"}
+</p>
               </div>
             </div>
           </Card>
@@ -94,10 +95,17 @@ export default async function AccountPage() {
                 </p>
 
                 <p className="mt-1 font-medium">
-                  {user.realEstate
-                    ?.status ??
-                    "Sin estado"}
-                </p>
+  {user.realEstate?.status ===
+  "ACTIVE"
+    ? "Activo"
+    : user.realEstate?.status ===
+      "PENDING_VALIDATION"
+    ? "Pendiente de validación"
+    : user.realEstate?.status ===
+      "SUSPENDED"
+    ? "Suspendido"
+    : "Sin estado"}
+</p>
               </div>
 
               <div>
@@ -121,12 +129,12 @@ export default async function AccountPage() {
 
           <Card>
             <h3 className="text-lg font-semibold">
-              Seguridad
-            </h3>
+  Seguridad y acceso
+</h3>
 
-            <p className="mt-2 text-sm text-muted">
-              Próximamente vas a poder:
-            </p>
+<p className="mt-2 text-sm text-muted">
+  Próximamente vas a poder gestionar la seguridad de tu cuenta.
+</p>
 
             <ul className="mt-4 list-inside list-disc space-y-2 text-sm text-muted">
               <li>
