@@ -48,10 +48,61 @@ export function PropertyForm({ property }: { property?: { id: string; [key: stri
         <Field label="% permuta"><Input type="number" {...form.register("tradePercent")} /></Field>
       </div>
       <div className="grid gap-4 md:grid-cols-4">
-        <Field label="Luz"><Input {...form.register("luz")} placeholder="Red, Solar..." /></Field>
-        <Field label="Agua"><Input {...form.register("agua")} placeholder="Red, Pozo..." /></Field>
-        <Field label="Gas"><Input {...form.register("gas")} placeholder="Red, Garrafa..." /></Field>
-        <Field label="Conectividad"><Input {...form.register("conectividad")} placeholder="Fibra, Satelital..." /></Field>
+        <Field label="Luz">
+  <Select
+    {...form.register(
+      "luz"
+    )}
+  >
+    <option value="">
+      Seleccionar
+    </option>
+
+    <option value="RED">
+      Red eléctrica
+    </option>
+
+    <option value="SOLAR">
+      Solar
+    </option>
+
+    <option value="GENERADOR">
+      Generador
+    </option>
+
+    <option value="SIN_SERVICIO">
+      Sin servicio
+    </option>
+  </Select>
+</Field>
+        <Field label="Agua">
+  <Select {...form.register("agua")}>
+    <option value="">Seleccionar</option>
+    <option value="RED">Red</option>
+    <option value="POZO">Pozo</option>
+    <option value="VERTIENTE">Vertiente</option>
+    <option value="SIN_SERVICIO">Sin servicio</option>
+  </Select>
+</Field>
+        <Field label="Gas">
+  <Select {...form.register("gas")}>
+    <option value="">Seleccionar</option>
+    <option value="RED">Red</option>
+    <option value="GARRAFA">Garrafa</option>
+    <option value="ZEPPELIN">Zeppelin</option>
+    <option value="SIN_SERVICIO">Sin servicio</option>
+  </Select>
+</Field>
+        <Field label="Conectividad">
+  <Select {...form.register("conectividad")}>
+    <option value="">Seleccionar</option>
+    <option value="FIBRA">Fibra óptica</option>
+    <option value="CABLE">Cable</option>
+    <option value="4G_5G">4G / 5G</option>
+    <option value="SATELITAL">Satelital</option>
+    <option value="SIN_SERVICIO">Sin servicio</option>
+  </Select>
+</Field>
       </div>
       {type === "CAMPO" ? (
         <div className="grid gap-4 md:grid-cols-3">
@@ -67,10 +118,110 @@ export function PropertyForm({ property }: { property?: { id: string; [key: stri
           <Field label="Apta credito"><Select {...form.register("creditReady")}><option value="false">No</option><option value="true">Si</option></Select></Field>
           <Field label="Pileta"><Select {...form.register("pool")}><option value="false">No</option><option value="true">Si</option></Select></Field>
           <Field label="Cochera"><Select {...form.register("garage")}><option value="false">No</option><option value="true">Si</option></Select></Field>
-          <Field label="Tipo barrio"><Input {...form.register("neighborhoodType")} /></Field>
-          <Field label="Acceso"><Input {...form.register("access")} /></Field>
-          <Field label="Construccion"><Input {...form.register("constructionTypes")} placeholder="Tradicional, Seco" /></Field>
-          <Field label="Estado general"><Input {...form.register("generalState")} /></Field>
+          <Field label="Tipo barrio">
+  <Select
+    {...form.register(
+      "neighborhoodType"
+    )}
+  >
+    <option value="">
+      Seleccionar
+    </option>
+
+    <option value="CENTRO">
+      Centro
+    </option>
+
+    <option value="BARRIO_ABIERTO">
+      Barrio abierto
+    </option>
+
+    <option value="BARRIO_CERRADO">
+      Barrio cerrado
+    </option>
+
+    <option value="COUNTRY">
+      Country
+    </option>
+
+    <option value="PRIVADO">
+      Privado
+    </option>
+  </Select>
+</Field>
+          <Field label="Acceso">
+  <Select {...form.register("access")}>
+    <option value="">
+      Seleccionar
+    </option>
+
+    <option value="ASFALTO">
+      Asfalto
+    </option>
+
+    <option value="RIPIO">
+      Ripio
+    </option>
+
+    <option value="TIERRA">
+      Tierra
+    </option>
+  </Select>
+</Field>
+          <Field label="Construcción">
+  <Select
+    {...form.register(
+      "constructionTypes"
+    )}
+  >
+    <option value="">
+      Seleccionar
+    </option>
+
+    <option value="TRADICIONAL">
+      Tradicional
+    </option>
+
+    <option value="STEEL_FRAME">
+      Steel Frame
+    </option>
+
+    <option value="WOOD_FRAME">
+      Wood Frame
+    </option>
+
+    <option value="SECO">
+      Construcción en seco
+    </option>
+
+    <option value="MIXTO">
+      Mixto
+    </option>
+  </Select>
+</Field>
+          <Field label="Estado general">
+  <Select {...form.register("generalState")}>
+    <option value="">
+      Seleccionar
+    </option>
+
+    <option value="EXCELENTE">
+      Excelente
+    </option>
+
+    <option value="MUY_BUENO">
+      Muy bueno
+    </option>
+
+    <option value="BUENO">
+      Bueno
+    </option>
+
+    <option value="A_REFACCIONAR">
+      A refaccionar
+    </option>
+  </Select>
+</Field>
         </div>
       )}
       <Field label="Comentarios"><Textarea {...form.register("description")} /></Field>

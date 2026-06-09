@@ -54,14 +54,7 @@ function toClientData(
       data.desiredTypes,
 
     desiredCities:
-      data.desiredCities
-        .split(",")
-
-        .map((v) =>
-          v.trim()
-        )
-
-        .filter(Boolean),
+      data.desiredCities,
 
     financingNeeded:
       data.financingNeeded,

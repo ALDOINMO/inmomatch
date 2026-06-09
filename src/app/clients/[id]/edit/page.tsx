@@ -33,7 +33,7 @@ export default async function EditClientPage({ params }: { params: Promise<{ id:
           maxBudget: client.maxBudget.toString(),
           currency: client.currency,
           desiredTypes: client.desiredTypes,
-          desiredCities: client.desiredCities.join(", "),
+          desiredCities: client.desiredCities,
           financingNeeded: String(client.financingNeeded),
           financingPercent: client.financingPercent ?? undefined,
           hasTrade: String(client.hasTrade),

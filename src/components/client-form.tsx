@@ -8,13 +8,15 @@ import { Field } from "@/components/field";
 import { Button } from "@/components/ui/button";
 import { Input, Select } from "@/components/ui/input";
 import { clientSchema } from "@/validators/client";
+import { ClientLocalitiesSelector } from "@/components/client-localities-selector";
 
 type Values = Record<string, unknown> & { desiredTypes?: string[] };
 
 export function ClientForm({ client }: { client?: { id: string; [key: string]: unknown } }) {
   const [error, setError] = useState("");
   const [pending, startTransition] = useTransition();
-  const form = useForm<Values>({ resolver: zodResolver(clientSchema) as never, defaultValues: client ?? { currency: "USD", desiredTypes: ["CASA"], minMatchThreshold: 70 } });
+  const form = useForm<Values>({ resolver: zodResolver(clientSchema) as never, defaultValues: client ?? { currency: "USD", desiredTypes: ["CASA"], desiredCities: [], minMatchThreshold: 70 } });
+
 
   return (
     <form className="grid gap-5" onSubmit={form.handleSubmit((values) => startTransition(async () => {
@@ -29,7 +31,21 @@ export function ClientForm({ client }: { client?: { id: string; [key: string]: u
         <Field label="Presupuesto minimo"><Input type="number" {...form.register("minBudget")} /></Field>
         <Field label="Presupuesto maximo"><Input type="number" {...form.register("maxBudget")} /></Field>
         <Field label="Moneda"><Select {...form.register("currency")}><option>USD</option><option>ARS</option></Select></Field>
-        <Field label="Localidades buscadas"><Input {...form.register("desiredCities")} placeholder="Villa Rumipal, Embalse" /></Field>
+        <Field label="Localidades buscadas">
+  <ClientLocalitiesSelector
+    value={
+      (form.watch(
+        "desiredCities"
+      ) as string[]) ?? []
+    }
+    onChange={(value) =>
+      form.setValue(
+        "desiredCities",
+        value
+      )
+    }
+  />
+</Field>
         <Field label="Umbral alerta %"><Input type="number" {...form.register("minMatchThreshold")} /></Field>
       </div>
       <div className="grid gap-3 md:grid-cols-4">
@@ -52,13 +68,71 @@ export function ClientForm({ client }: { client?: { id: string; [key: string]: u
         <Field label="Sup. total min."><Input type="number" {...form.register("minTotalArea")} /></Field>
         <Field label="Pileta"><Select {...form.register("pool")}><option>Indiferente</option><option>SI</option><option>NO</option></Select></Field>
         <Field label="Cochera"><Select {...form.register("garage")}><option>Indiferente</option><option>SI</option><option>NO</option></Select></Field>
-        <Field label="Luz"><Input {...form.register("luz")} placeholder="Red, Solar, Indiferente" /></Field>
-        <Field label="Agua"><Input {...form.register("agua")} /></Field>
-        <Field label="Gas"><Input {...form.register("gas")} /></Field>
-        <Field label="Conectividad"><Input {...form.register("conectividad")} /></Field>
-        <Field label="Construccion"><Input {...form.register("constructionTypes")} /></Field>
-        <Field label="Tipo barrio"><Input {...form.register("neighborhoodType")} /></Field>
-        <Field label="Acceso"><Input {...form.register("access")} /></Field>
+        <Field label="Luz">
+  <Select {...form.register("luz")}>
+    <option value="">Indiferente</option>
+    <option value="RED">Red eléctrica</option>
+    <option value="SOLAR">Solar</option>
+    <option value="GENERADOR">Generador</option>
+    <option value="SIN_SERVICIO">Sin servicio</option>
+  </Select>
+</Field>
+<Field label="Agua">
+  <Select {...form.register("agua")}>
+    <option value="">Indiferente</option>
+    <option value="RED">Red</option>
+    <option value="POZO">Pozo</option>
+    <option value="VERTIENTE">Vertiente</option>
+    <option value="SIN_SERVICIO">Sin servicio</option>
+  </Select>
+</Field>
+        <Field label="Gas">
+  <Select {...form.register("gas")}>
+    <option value="">Indiferente</option>
+    <option value="RED">Red</option>
+    <option value="GARRAFA">Garrafa</option>
+    <option value="ZEPPELIN">Zeppelin</option>
+    <option value="SIN_SERVICIO">Sin servicio</option>
+  </Select>
+</Field>
+        <Field label="Conectividad">
+  <Select {...form.register("conectividad")}>
+    <option value="">Indiferente</option>
+    <option value="FIBRA">Fibra óptica</option>
+    <option value="CABLE">Cable</option>
+    <option value="4G_5G">4G / 5G</option>
+    <option value="SATELITAL">Satelital</option>
+    <option value="SIN_SERVICIO">Sin servicio</option>
+  </Select>
+</Field>
+        <Field label="Construcción">
+  <Select {...form.register("constructionTypes")}>
+    <option value="">Indiferente</option>
+    <option value="TRADICIONAL">Tradicional</option>
+    <option value="STEEL_FRAME">Steel Frame</option>
+    <option value="WOOD_FRAME">Wood Frame</option>
+    <option value="SECO">Construcción en seco</option>
+    <option value="MIXTO">Mixto</option>
+  </Select>
+</Field>
+        <Field label="Tipo barrio">
+  <Select {...form.register("neighborhoodType")}>
+    <option value="">Indiferente</option>
+    <option value="CENTRO">Centro</option>
+    <option value="BARRIO_ABIERTO">Barrio abierto</option>
+    <option value="BARRIO_CERRADO">Barrio cerrado</option>
+    <option value="COUNTRY">Country</option>
+    <option value="PRIVADO">Privado</option>
+  </Select>
+</Field>
+        <Field label="Acceso">
+  <Select {...form.register("access")}>
+    <option value="">Indiferente</option>
+    <option value="ASFALTO">Asfalto</option>
+    <option value="RIPIO">Ripio</option>
+    <option value="TIERRA">Tierra</option>
+  </Select>
+</Field>
       </div>
       <div className="grid gap-4 md:grid-cols-3">
         <Field label="Aptitud suelo campo"><Input {...form.register("soilAptitude")} /></Field>
