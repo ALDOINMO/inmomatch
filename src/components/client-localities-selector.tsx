@@ -3,18 +3,15 @@
 import { useEffect, useState } from "react";
 
 type Province = {
-  id: string;
-  nombre: string;
+  province: string;
 };
 
 type Department = {
-  id: string;
-  nombre: string;
+  department: string;
 };
 
-type Locality = {
-  id: string;
-  nombre: string;
+type City = {
+  city: string;
 };
 
 export function ClientLocalitiesSelector({
@@ -32,8 +29,8 @@ export function ClientLocalitiesSelector({
   const [departments, setDepartments] =
     useState<Department[]>([]);
 
-  const [localities, setLocalities] =
-    useState<Locality[]>([]);
+  const [cities, setCities] =
+    useState<City[]>([]);
 
   const [province, setProvince] =
     useState("");
@@ -41,74 +38,90 @@ export function ClientLocalitiesSelector({
   const [department, setDepartment] =
     useState("");
 
-  const [locality, setLocality] =
+  const [city, setCity] =
     useState("");
 
   useEffect(() => {
-    fetch(
-      "/api/georef/provincias"
-    )
-      .then((r) => r.json())
-      .then((data) =>
-        setProvinces(
-          data.provincias ?? []
-        )
+    async function load() {
+      const response =
+        await fetch(
+          "/api/locations/provinces"
+        );
+
+      const data =
+        await response.json();
+
+      setProvinces(
+        data.provinces ?? []
       );
+    }
+
+    load();
   }, []);
 
   useEffect(() => {
-    if (!province) {
-      setDepartments([]);
-      return;
+    async function load() {
+      if (!province) {
+        setDepartments([]);
+        return;
+      }
+
+      const response =
+        await fetch(
+          `/api/locations/departments?province=${encodeURIComponent(
+            province
+          )}`
+        );
+
+      const data =
+        await response.json();
+
+      setDepartments(
+        data.departments ?? []
+      );
     }
 
-    fetch(
-      `/api/georef/departamentos?provincia=${encodeURIComponent(
-        province
-      )}`
-    )
-      .then((r) => r.json())
-      .then((data) =>
-        setDepartments(
-          data.departamentos ?? []
-        )
-      );
+    load();
   }, [province]);
 
   useEffect(() => {
-    if (
-      !province ||
-      !department
-    ) {
-      setLocalities([]);
-      return;
+    async function load() {
+      if (
+        !province ||
+        !department
+      ) {
+        setCities([]);
+        return;
+      }
+
+      const response =
+        await fetch(
+          `/api/locations/cities?province=${encodeURIComponent(
+            province
+          )}&department=${encodeURIComponent(
+            department
+          )}`
+        );
+
+      const data =
+        await response.json();
+
+      setCities(
+        data.cities ?? []
+      );
     }
 
-    fetch(
-      `/api/georef/localidades?provincia=${encodeURIComponent(
-        province
-      )}&departamento=${encodeURIComponent(
-        department
-      )}`
-    )
-      .then((r) => r.json())
-      .then((data) =>
-        setLocalities(
-          data.localidades ?? []
-        )
-      );
+    load();
   }, [
     province,
     department,
   ]);
 
-  function addLocality() {
-    if (!locality) return;
+  function addCity() {
+    if (!city) return;
 
     if (
-      value.includes(
-        locality
-      )
+      value.includes(city)
     )
       return;
 
@@ -117,102 +130,127 @@ export function ClientLocalitiesSelector({
 
     onChange([
       ...value,
-      locality,
+      city,
     ]);
 
-    setLocality("");
+    setCity("");
   }
 
-  function removeLocality(
-    city: string
+  function removeCity(
+    cityToRemove: string
   ) {
     onChange(
       value.filter(
-        (v) => v !== city
+        (v) =>
+          v !== cityToRemove
       )
     );
   }
-
 
   return (
     <div className="grid gap-3">
       <div className="grid gap-3 md:grid-cols-2">
         <select
-          className="h-10 rounded-md border border-border bg-black/20 px-3 text-sm"
+          className="h-10 w-full rounded-md border border-border bg-black/20 px-3 text-sm"
           value={province}
           onChange={(e) => {
             setProvince(
               e.target.value
             );
-            setDepartment("");
+
+            setDepartment(
+              ""
+            );
+
+            setCities([]);
           }}
         >
           <option value="">
             Provincia
           </option>
 
-          {provinces.map((p) => (
-            <option
-              key={p.id}
-              value={p.nombre}
-            >
-              {p.nombre}
-            </option>
-          ))}
+          {provinces.map(
+            (province) => (
+              <option
+                key={
+                  province.province
+                }
+                value={
+                  province.province
+                }
+              >
+                {
+                  province.province
+                }
+              </option>
+            )
+          )}
         </select>
 
         <select
-          className="h-10 rounded-md border border-border bg-black/20 px-3 text-sm"
+          className="h-10 w-full rounded-md border border-border bg-black/20 px-3 text-sm"
           value={department}
           onChange={(e) =>
             setDepartment(
               e.target.value
             )
           }
+          disabled={!province}
         >
           <option value="">
             Departamento
           </option>
 
-          {departments.map((d) => (
-            <option
-              key={d.id}
-              value={d.nombre}
-            >
-              {d.nombre}
-            </option>
-          ))}
+          {departments.map(
+            (department) => (
+              <option
+                key={
+                  department.department
+                }
+                value={
+                  department.department
+                }
+              >
+                {
+                  department.department
+                }
+              </option>
+            )
+          )}
         </select>
       </div>
 
-      <div className="flex gap-2">
+      <div className="grid grid-cols-[1fr_auto] gap-2">
         <select
-          className="h-10 flex-1 rounded-md border border-border bg-black/20 px-3 text-sm"
-          value={locality}
+          className="h-10 min-w-0 rounded-md border border-border bg-black/20 px-3 text-sm"
+          value={city}
           onChange={(e) =>
-            setLocality(
+            setCity(
               e.target.value
             )
           }
+          disabled={!department}
         >
           <option value="">
             Localidad
           </option>
 
-          {localities.map((l) => (
-            <option
-              key={l.id}
-              value={l.nombre}
-            >
-              {l.nombre}
-            </option>
-          ))}
+          {cities.map(
+            (city) => (
+              <option
+                key={city.city}
+                value={city.city}
+              >
+                {city.city}
+              </option>
+            )
+          )}
         </select>
 
         <button
           type="button"
           onClick={
-            addLocality
+            addCity
           }
           className="rounded-md border border-border px-4"
         >
@@ -221,14 +259,12 @@ export function ClientLocalitiesSelector({
       </div>
 
       <div className="flex flex-wrap gap-2">
-  {value.map((city) => (
+        {value.map((city) => (
           <button
             key={city}
             type="button"
             onClick={() =>
-              removeLocality(
-                city
-              )
+              removeCity(city)
             }
             className="rounded-full border border-border px-3 py-1 text-sm"
           >

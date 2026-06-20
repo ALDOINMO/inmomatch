@@ -7,6 +7,8 @@ export const propertySchema = z.object({
   price: z.coerce.number().positive(),
   currency: z.enum(["USD", "ARS"]).default("USD"),
   address: z.string().min(5),
+  province: z.string().optional(),
+  department: z.string().optional(),
   city: z.string().min(2),
   neighborhood: z.string().optional(),
   description: z.string().optional(),

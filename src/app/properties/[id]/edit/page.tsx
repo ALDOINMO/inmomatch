@@ -33,6 +33,8 @@ export default async function EditPropertyPage({ params }: { params: Promise<{ i
           price: property.price.toString(),
           currency: property.currency,
           address: property.address,
+          province:property.province ?? "",
+          department: property.department ?? "",
           city: property.city,
           neighborhood: property.neighborhood ?? "",
           description: property.description ?? "",

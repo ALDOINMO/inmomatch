@@ -56,6 +56,9 @@ function toClientData(
     desiredCities:
       data.desiredCities,
 
+      desiredNeighborhoods:
+  data.desiredNeighborhoods ?? [],
+
     financingNeeded:
       data.financingNeeded,
 

@@ -16,6 +16,8 @@ import { logoutAction } from "@/actions/auth";
 
 import { prisma } from "@/lib/prisma";
 
+import { CalendarDays } from "lucide-react";
+
 const nav = [
   {
     href: "/dashboard",
@@ -46,6 +48,11 @@ const nav = [
   icon: Users,
 },
 
+{
+  href: "/agenda",
+  label: "Agenda",
+  icon: CalendarDays,
+},
 ];
 
 export async function AppShell({
@@ -137,18 +144,24 @@ export async function AppShell({
         <header className="sticky top-0 z-10 border-b border-border bg-background/85 px-5 py-4 backdrop-blur md:px-8">
           <div className="flex items-center justify-between">
             <div>
-  <p className="text-sm text-muted">
-    Sesión activa
-  </p>
-
   <h1 className="font-semibold">
-    {user.role === Role.SUPER_ADMIN
-      ? "Super Administrador"
-      : user.role ===
-        Role.ADMIN_REAL_ESTATE
-      ? "Administrador"
-      : "Corredor"}
-  </h1>
+  {user.role === Role.SUPER_ADMIN
+    ? "Super Administrador"
+    : user.role ===
+      Role.ADMIN_REAL_ESTATE
+    ? "Administrador"
+    : "Corredor"}
+</h1>
+
+<p className="text-sm text-muted">
+  {user.realEstate?.name ??
+    "Sin inmobiliaria"}
+</p>
+<div className="mt-1 flex items-center gap-2">
+  <span className="text-xs text-green-400">
+    ✓ Matrícula activa
+  </span>
+</div>
 </div>
 
             <div className="flex items-center gap-3">

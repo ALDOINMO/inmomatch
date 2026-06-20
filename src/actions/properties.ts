@@ -48,6 +48,13 @@ function toPropertyData(
       data.address
     )}`,
 
+    province:
+  data.province,
+
+department:
+  data.department,
+
+
     city: data.city,
 
     neighborhood:
@@ -322,6 +329,12 @@ export async function recomputeMatchesForProperty(
     );
 
   if (!property) return;
+
+  await prisma.match.deleteMany({
+  where: {
+    propertyId,
+  },
+});
 
   const clients =
     await prisma.client.findMany(

@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input, Select } from "@/components/ui/input";
 import { clientSchema } from "@/validators/client";
 import { ClientLocalitiesSelector } from "@/components/client-localities-selector";
+import { ClientNeighborhoodsSelector } from "@/components/client-neighborhoods-selector";
 
 type Values = Record<string, unknown> & { desiredTypes?: string[] };
 
@@ -46,8 +47,44 @@ export function ClientForm({ client }: { client?: { id: string; [key: string]: u
     }
   />
 </Field>
-        <Field label="Umbral alerta %"><Input type="number" {...form.register("minMatchThreshold")} /></Field>
+
+        <Field label="Umbral alerta %">
+  <Input
+    className="max-w-24"
+    type="number"
+    {...form.register(
+      "minMatchThreshold"
+    )}
+  />
+</Field>
       </div>
+      {
+  ((form.watch(
+    "desiredCities"
+  ) as string[]) ?? [])
+    .length > 0 && (
+      <Field label="Barrios buscados">
+        <ClientNeighborhoodsSelector
+          cities={
+            (form.watch(
+              "desiredCities"
+            ) as string[]) ?? []
+          }
+          value={
+            (form.watch(
+              "desiredNeighborhoods"
+            ) as string[]) ?? []
+          }
+          onChange={(value) =>
+            form.setValue(
+              "desiredNeighborhoods",
+              value
+            )
+          }
+        />
+      </Field>
+  )
+}
       <div className="grid gap-3 md:grid-cols-4">
         {["CASA", "DEPARTAMENTO", "TERRENO", "CAMPO", "LOCAL", "OFICINA", "CABANA", "GALPON"].map((type) => (
           <label key={type} className="flex items-center gap-2 rounded-md border border-border bg-card px-3 py-2 text-sm">

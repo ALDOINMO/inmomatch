@@ -55,6 +55,16 @@ export function calculateMatch(property: Property, client: Client): MatchComputa
   if (client.desiredCities.length && !client.desiredCities.includes(property.city)) {
     exclusions.push("La localidad no esta dentro de las zonas buscadas.");
   }
+  if (
+  client.desiredNeighborhoods.length > 0 &&
+  !client.desiredNeighborhoods.includes(
+    `${property.city}|${property.neighborhood}`
+  )
+) {
+  exclusions.push(
+    "El barrio no esta dentro de las zonas buscadas."
+  );
+}
   if (client.financingNeeded && !property.financing) exclusions.push("El cliente necesita financiacion y la propiedad no la acepta.");
   if (client.hasTrade && !property.acceptsTrade) exclusions.push("El cliente ofrece permuta y la propiedad no la acepta.");
   if (client.hasTrade && property.acceptsTrade && client.tradePercent && property.tradePercent) {

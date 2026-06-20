@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input, Select, Textarea } from "@/components/ui/input";
 import { propertySchema } from "@/validators/property";
 import { GeoRefLocalitySelect } from "@/components/georef-locality-select";
+import { NeighborhoodSelect } from "@/components/neighborhood-select";
 
 type Values = Record<string, unknown>;
 
@@ -33,13 +34,60 @@ export function PropertyForm({ property }: { property?: { id: string; [key: stri
         <Field label="Direccion exacta"><Input {...form.register("address")} /></Field>
         <Field label="Localidad">
   <GeoRefLocalitySelect
-    value={String(form.watch("city") ?? "")}
+  value={{
+    province: String(
+      form.watch("province") ?? ""
+    ),
+
+    department: String(
+      form.watch("department") ?? ""
+    ),
+
+    city: String(
+      form.watch("city") ?? ""
+    ),
+  }}
+  onChange={(value) => {
+    form.setValue(
+      "province",
+      value.province
+    );
+
+    form.setValue(
+      "department",
+      value.department
+    );
+
+    form.setValue(
+      "city",
+      value.city
+    );
+
+    form.setValue(
+      "neighborhood",
+      ""
+    );
+  }}
+/>
+</Field>
+        <Field label="Barrio">
+  <NeighborhoodSelect
+    city={String(
+      form.watch("city") ?? ""
+    )}
+    value={String(
+      form.watch(
+        "neighborhood"
+      ) ?? ""
+    )}
     onChange={(value) =>
-      form.setValue("city", value)
+      form.setValue(
+        "neighborhood",
+        value
+      )
     }
   />
 </Field>
-        <Field label="Barrio"><Input {...form.register("neighborhood")} /></Field>
       </div>
       <div className="grid gap-4 md:grid-cols-4">
         <Field label="Financiacion"><Select {...form.register("financing")}><option value="false">No</option><option value="true">Si</option></Select></Field>

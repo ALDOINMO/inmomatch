@@ -3,26 +3,32 @@
 import { useEffect, useState } from "react";
 
 type Province = {
-  id: string;
-  nombre: string;
+  province: string;
 };
 
 type Department = {
-  id: string;
-  nombre: string;
+  department: string;
 };
 
-type Locality = {
-  id: string;
-  nombre: string;
+type City = {
+  city: string;
 };
 
 export function GeoRefLocalitySelect({
   value,
   onChange,
 }: {
-  value?: string;
-  onChange: (value: string) => void;
+  value?: {
+    province?: string;
+    department?: string;
+    city?: string;
+  };
+
+  onChange: (value: {
+    province: string;
+    department: string;
+    city: string;
+  }) => void;
 }) {
   const [provinces, setProvinces] =
     useState<Province[]>([]);
@@ -30,8 +36,8 @@ export function GeoRefLocalitySelect({
   const [departments, setDepartments] =
     useState<Department[]>([]);
 
-  const [localities, setLocalities] =
-    useState<Locality[]>([]);
+  const [cities, setCities] =
+    useState<City[]>([]);
 
   const [province, setProvince] =
     useState("");
@@ -39,30 +45,31 @@ export function GeoRefLocalitySelect({
   const [department, setDepartment] =
     useState("");
 
+    useEffect(() => {
+  if (!value) return;
+
+  setProvince(
+    value.province ?? ""
+  );
+
+  setDepartment(
+    value.department ?? ""
+  );
+}, [value]);
+
   useEffect(() => {
     async function load() {
-      try {
-        const response =
-          await fetch(
-            "/api/georef/provincias"
-          );
-
-        const data =
-          await response.json();
-          console.log(
-  "PROVINCIAS",
-  data
-);
-
-        setProvinces(
-          data.provincias ?? []
+      const response =
+        await fetch(
+          "/api/locations/provinces"
         );
-      } catch (error) {
-        console.error(
-          "GeoRef provincias",
-          error
-        );
-      }
+
+      const data =
+        await response.json();
+
+      setProvinces(
+        data.provinces ?? []
+      );
     }
 
     load();
@@ -75,31 +82,19 @@ export function GeoRefLocalitySelect({
         return;
       }
 
-      try {
-        const response =
-  await fetch(
-    `/api/georef/departamentos?provincia=${encodeURIComponent(
-      province
-    )}`
-  );
-
-        const data =
-          await response.json();
-          console.log(
-  "DEPARTAMENTOS",
-  data
-);
-
-        setDepartments(
-          data.departamentos ??
-            []
+      const response =
+        await fetch(
+          `/api/locations/departments?province=${encodeURIComponent(
+            province
+          )}`
         );
-      } catch (error) {
-        console.error(
-          "GeoRef departamentos",
-          error
-        );
-      }
+
+      const data =
+        await response.json();
+
+      setDepartments(
+        data.departments ?? []
+      );
     }
 
     load();
@@ -111,37 +106,25 @@ export function GeoRefLocalitySelect({
         !province ||
         !department
       ) {
-        setLocalities([]);
+        setCities([]);
         return;
       }
 
-      try {
-        const response =
-  await fetch(
-    `/api/georef/localidades?provincia=${encodeURIComponent(
-      province
-    )}&departamento=${encodeURIComponent(
-      department
-    )}`
-  );
-
-        const data =
-          await response.json();
-          console.log(
-  "LOCALIDADES",
-  data
-);
-
-        setLocalities(
-          data.localidades ??
-            []
+      const response =
+        await fetch(
+          `/api/locations/cities?province=${encodeURIComponent(
+            province
+          )}&department=${encodeURIComponent(
+            department
+          )}`
         );
-      } catch (error) {
-        console.error(
-          "GeoRef localidades",
-          error
-        );
-      }
+
+      const data =
+        await response.json();
+
+      setCities(
+        data.cities ?? []
+      );
     }
 
     load();
@@ -160,22 +143,34 @@ export function GeoRefLocalitySelect({
             setProvince(
               e.target.value
             );
-            setDepartment("");
-            setLocalities([]);
+
+            setDepartment(
+              ""
+            );
+
+            setCities([]);
           }}
         >
           <option value="">
             Provincia
           </option>
 
-          {provinces.map((p) => (
-            <option
-              key={p.id}
-              value={p.nombre}
-            >
-              {p.nombre}
-            </option>
-          ))}
+          {provinces.map(
+            (province) => (
+              <option
+                key={
+                  province.province
+                }
+                value={
+                  province.province
+                }
+              >
+                {
+                  province.province
+                }
+              </option>
+            )
+          )}
         </select>
 
         <select
@@ -192,40 +187,50 @@ export function GeoRefLocalitySelect({
             Departamento
           </option>
 
-          {departments.map((d) => (
-            <option
-              key={d.id}
-              value={d.nombre}
-            >
-              {d.nombre}
-            </option>
-          ))}
+          {departments.map(
+            (department) => (
+              <option
+                key={
+                  department.department
+                }
+                value={
+                  department.department
+                }
+              >
+                {
+                  department.department
+                }
+              </option>
+            )
+          )}
         </select>
       </div>
 
       <select
-        className="h-10 rounded-md border border-border bg-black/20 px-3 text-sm"
-        value={value}
-        onChange={(e) =>
-          onChange(
-            e.target.value
-          )
-        }
-        disabled={!department}
-      >
-        <option value="">
-          Localidad
-        </option>
+  className="h-10 rounded-md border border-border bg-black/20 px-3 text-sm"
+  value={value?.city ?? ""}
+  onChange={(e) =>
+    onChange({
+      province,
+      department,
+      city: e.target.value,
+    })
+  }
+  disabled={!department}
+>
+  <option value="">
+    Localidad
+  </option>
 
-        {localities.map((l) => (
-          <option
-            key={l.id}
-            value={l.nombre}
-          >
-            {l.nombre}
-          </option>
-        ))}
-      </select>
+  {cities.map((city) => (
+    <option
+      key={city.city}
+      value={city.city}
+    >
+      {city.city}
+    </option>
+  ))}
+</select>
     </div>
   );
 }

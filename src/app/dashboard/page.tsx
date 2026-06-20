@@ -152,34 +152,31 @@ export default async function DashboardPage() {
 
   return (
     <AppShell user={user}>
-      <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <h2 className="text-3xl font-semibold">
-            Centro de oportunidades
-          </h2>
+  <div className="mb-6 grid gap-4 md:grid-cols-2">
+  <Link href="/clients/new">
+    <Card className="cursor-pointer transition hover:border-accent">
+      <h3 className="text-lg font-semibold">
+        Tengo un Cliente
+      </h3>
 
-          <p className="mt-2 text-sm text-muted">
-            Cruzá demandas reales,
-            detectá oportunidades y
-            conectate con colegas
-            compatibles.
-          </p>
-        </div>
+      <p className="mt-1 text-sm text-muted">
+        Nueva demanda
+      </p>
+    </Card>
+  </Link>
 
-        <div className="flex gap-2">
-          <Link href="/properties/new">
-            <Button>
-              Tengo una propiedad
-            </Button>
-          </Link>
+  <Link href="/properties/new">
+    <Card className="cursor-pointer transition hover:border-accent">
+      <h3 className="text-lg font-semibold">
+        Tengo una Propiedad
+      </h3>
 
-          <Link href="/clients/new">
-            <Button variant="secondary">
-              Tengo un cliente
-            </Button>
-          </Link>
-        </div>
-      </div>
+      <p className="mt-1 text-sm text-muted">
+        Nuevo stock
+      </p>
+    </Card>
+  </Link>
+</div>
 
       <div className="grid gap-4 md:grid-cols-4">
         <StatCard
@@ -203,65 +200,6 @@ export default async function DashboardPage() {
         />
       </div>
 
-      <div className="mt-6 grid gap-4 lg:grid-cols-3">
-        <Card className="border-green-500/20 bg-green-500/5">
-          <p className="text-sm text-green-400">
-            Matches premium
-          </p>
-
-          <h3 className="mt-3 text-4xl font-bold">
-            {strongMatches}
-          </h3>
-
-          <p className="mt-2 text-sm text-muted">
-            Coincidencias superiores
-            al 90%.
-          </p>
-        </Card>
-
-        <Card className="border-yellow-500/20 bg-yellow-500/5">
-          <p className="text-sm text-yellow-400">
-            Esperando respuesta
-          </p>
-
-          <h3 className="mt-3 text-4xl font-bold">
-            {pendingMatches}
-          </h3>
-
-          <p className="mt-2 text-sm text-muted">
-            Matches pendientes del
-            colega.
-          </p>
-        </Card>
-
-        <Card>
-          <p className="text-sm text-accent">
-            Estado operativo
-          </p>
-
-          <h3 className="mt-3 text-xl font-semibold">
-            {user.role ===
-            "SUPER_ADMIN"
-              ? "Administrador general"
-              : user.realEstate
-                  ?.status ===
-                "ACTIVE"
-              ? "Cuenta activa"
-              : "Pendiente validación"}
-          </h3>
-
-          <p className="mt-2 text-sm text-muted">
-            {user.role ===
-            "SUPER_ADMIN"
-              ? "Control total de la plataforma."
-              : user.realEstate
-                  ?.status ===
-                "ACTIVE"
-              ? "Tu inmobiliaria está operativa dentro de la red."
-              : "Tu matrícula todavía está siendo revisada."}
-          </p>
-        </Card>
-      </div>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[1.3fr_0.7fr]">
         <Card>
