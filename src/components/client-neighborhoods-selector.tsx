@@ -43,18 +43,21 @@ export function ClientNeighborhoodsSelector({
         Neighborhood[]
       > = {};
 
-      for (const city of cities) {
-        const response =
-          await fetch(
-            `/api/neighborhoods?city=${encodeURIComponent(
-              city
-            )}`
-          );
+      for (const location of cities) {
+  const city =
+    location.split("|").at(-1) ?? "";
+
+  const response =
+    await fetch(
+      `/api/neighborhoods?city=${encodeURIComponent(
+        city
+      )}`
+    );
 
         const data =
           await response.json();
 
-        result[city] =
+        result[location] =
           data.neighborhoods ??
           [];
       }
@@ -100,8 +103,8 @@ export function ClientNeighborhoodsSelector({
           className="rounded-lg border border-border p-4"
         >
           <h4 className="mb-3 font-medium">
-            {city}
-          </h4>
+  {city.split("|").at(-1)}
+</h4>
           <div className="mb-3">
   <label className="flex items-center gap-2 text-sm">
     <input

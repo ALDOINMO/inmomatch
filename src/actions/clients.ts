@@ -60,19 +60,22 @@ function toClientData(
   data.desiredNeighborhoods ?? [],
 
     financingNeeded:
-      data.financingNeeded,
+  data.financingNeeded ===
+  "true",
 
     financingPercent:
       data.financingPercent,
 
     hasTrade:
-      data.hasTrade,
+  data.hasTrade ===
+  "true",
 
     tradePercent:
       data.tradePercent,
 
     needsCredit:
-      data.needsCredit,
+  data.needsCredit ===
+  "true",
 
     minMatchThreshold:
       data.minMatchThreshold,
@@ -301,6 +304,13 @@ export async function recomputeMatchesForClient(
         property,
         client
       );
+
+      if (
+  property.realEstateId ===
+  client.realEstateId
+) {
+  continue;
+}
 
     if (
       result.score >=

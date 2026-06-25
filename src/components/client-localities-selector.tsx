@@ -117,24 +117,55 @@ export function ClientLocalitiesSelector({
     department,
   ]);
 
+  useEffect(() => {
+  if (!value.length) return;
+
+  const firstLocation =
+    value[0];
+
+  const [
+    savedProvince,
+    savedDepartment,
+    savedCity,
+  ] = firstLocation.split("|");
+
+  setProvince(
+    savedProvince
+  );
+
+  setDepartment(
+    savedDepartment
+  );
+
+  setCity(savedCity);
+}, [value]);
+
   function addCity() {
-    if (!city) return;
+  if (
+    !province ||
+    !department ||
+    !city
+  )
+    return;
 
-    if (
-      value.includes(city)
-    )
-      return;
+  const location =
+    `${province}|${department}|${city}`;
 
-    if (value.length >= 4)
-      return;
+  if (
+    value.includes(location)
+  )
+    return;
 
-    onChange([
-      ...value,
-      city,
-    ]);
+  if (value.length >= 4)
+    return;
 
-    setCity("");
-  }
+  onChange([
+    ...value,
+    location,
+  ]);
+
+  setCity("");
+}
 
   function removeCity(
     cityToRemove: string
@@ -259,18 +290,28 @@ export function ClientLocalitiesSelector({
       </div>
 
       <div className="flex flex-wrap gap-2">
-        {value.map((city) => (
-          <button
-            key={city}
-            type="button"
-            onClick={() =>
-              removeCity(city)
-            }
-            className="rounded-full border border-border px-3 py-1 text-sm"
-          >
-            {city} ✕
-          </button>
-        ))}
+        {value.map((city) => {
+  const parts =
+    city.split("|");
+
+  const cityName =
+    parts[
+      parts.length - 1
+    ];
+
+  return (
+    <button
+      key={city}
+      type="button"
+      onClick={() =>
+        removeCity(city)
+      }
+      className="rounded-full border border-border px-3 py-1 text-sm"
+    >
+      {cityName} ✕
+    </button>
+  );
+})}
       </div>
     </div>
   );

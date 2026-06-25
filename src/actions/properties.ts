@@ -54,7 +54,6 @@ function toPropertyData(
 department:
   data.department,
 
-
     city: data.city,
 
     neighborhood:
@@ -67,13 +66,15 @@ department:
       data.documentation,
 
     financing:
-      data.financing,
+  data.financing ===
+  "true",
 
     financingPercent:
       data.financingPercent,
 
     acceptsTrade:
-      data.acceptsTrade,
+  data.acceptsTrade ===
+  "true",
 
     tradePercent:
       data.tradePercent,
@@ -99,12 +100,17 @@ department:
       totalArea:
         data.totalArea,
 
-      creditReady:
-        data.creditReady,
+     creditReady:
+  data.creditReady ===
+  "true",
 
-      pool: data.pool,
+pool:
+  data.pool ===
+  "true",
 
-      garage: data.garage,
+garage:
+  data.garage ===
+  "true",
 
       neighborhoodType:
         data.neighborhoodType,
@@ -351,6 +357,13 @@ export async function recomputeMatchesForProperty(
         property,
         client
       );
+
+      if (
+  client.realEstateId ===
+  property.realEstateId
+) {
+  continue;
+}
 
     if (
       result.score >=

@@ -52,13 +52,25 @@ export function calculateMatch(property: Property, client: Client): MatchComputa
   if (Number(property.price) < Number(client.minBudget) || Number(property.price) > Number(client.maxBudget)) {
     exclusions.push("El valor queda fuera del presupuesto.");
   }
-  if (client.desiredCities.length && !client.desiredCities.includes(property.city)) {
-    exclusions.push("La localidad no esta dentro de las zonas buscadas.");
-  }
-  if (
+  const propertyLocation =
+  `${property.province}|${property.department}|${property.city}`;
+
+if (
+  client.desiredCities.length &&
+  !client.desiredCities.includes(propertyLocation)
+) {
+  exclusions.push(
+    "La localidad no esta dentro de las zonas buscadas."
+  );
+}
+
+const propertyNeighborhood =
+  `${property.province}|${property.department}|${property.city}|${property.neighborhood}`;
+
+if (
   client.desiredNeighborhoods.length > 0 &&
   !client.desiredNeighborhoods.includes(
-    `${property.city}|${property.neighborhood}`
+    propertyNeighborhood
   )
 ) {
   exclusions.push(
