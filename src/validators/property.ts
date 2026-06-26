@@ -12,7 +12,17 @@ export const propertySchema = z.object({
   city: z.string().min(2),
   neighborhood: z.string().optional(),
   description: z.string().optional(),
-  documentation: z.string().optional(),
+  documentation: z.enum([
+  "ESCRITURA",
+  "BOLETO_COMPRAVENTA",
+  "CESION_DERECHOS",
+  "SUCESION",
+  "POSESION",
+  "PRIMER_TESTIMONIO",
+  "OTRO",
+]).optional(),
+
+documentationOther: z.string().optional(),
   financing: z.enum(["true", "false"]).default("false"),
   financingPercent: z.coerce.number().int().min(0).max(100).optional(),
   acceptsTrade: z.enum(["true", "false"]).default("false"),

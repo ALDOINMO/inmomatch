@@ -39,6 +39,7 @@ export default async function EditPropertyPage({ params }: { params: Promise<{ i
           neighborhood: property.neighborhood ?? "",
           description: property.description ?? "",
           documentation: property.documentation ?? "",
+          documentationOther: property.documentationOther ?? "",
           financing: String(property.financing),
           financingPercent: property.financingPercent ?? undefined,
           acceptsTrade: String(property.acceptsTrade),

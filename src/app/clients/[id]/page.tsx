@@ -28,9 +28,9 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
           <p className="text-3xl font-semibold">{formatMoney(client.minBudget.toString(), client.currency)} - {formatMoney(client.maxBudget.toString(), client.currency)}</p>
           <dl className="mt-5 grid gap-3 text-sm md:grid-cols-2">
             <div><dt className="text-muted">Tipos</dt><dd>{client.desiredTypes.join(", ")}</dd></div>
-            <div><dt className="text-muted">Financiacion</dt><dd>{client.financingNeeded ? "Si" : "No"}</dd></div>
-            <div><dt className="text-muted">Permuta</dt><dd>{client.hasTrade ? "Si" : "No"}</dd></div>
-            <div><dt className="text-muted">Apta credito</dt><dd>{client.needsCredit ? "Si" : "No"}</dd></div>
+            <div><dt className="text-muted">Financiación</dt><dd>{client.financingNeeded === "SI" ? "Sí" : client.financingNeeded === "NO" ? "No" : "Indiferente"}</dd></div>
+            <div><dt className="text-muted">Permuta</dt><dd>{client.hasTrade === "SI" ? "Sí" : client.hasTrade === "NO" ? "No" : "Indiferente"}</dd></div>
+            <div><dt className="text-muted">Apta crédito</dt><dd>{client.needsCredit === "SI" ? "Sí" : client.needsCredit === "NO" ? "No" : "Indiferente"}</dd></div>
           </dl>
         </Card>
         <Card>

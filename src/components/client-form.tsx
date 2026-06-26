@@ -93,11 +93,11 @@ export function ClientForm({ client }: { client?: { id: string; [key: string]: u
         ))}
       </div>
       <div className="grid gap-4 md:grid-cols-4">
-        <Field label="Necesita financiacion"><Select {...form.register("financingNeeded")}><option value="false">No</option><option value="true">Si</option></Select></Field>
+        <Field label="Necesita financiación"><Select {...form.register("financingNeeded")}><option value="INDIFERENTE">Indiferente</option><option value="SI">Sí</option><option value="NO">No</option></Select></Field>
         <Field label="% financiacion"><Input type="number" {...form.register("financingPercent")} /></Field>
-        <Field label="Tiene permuta"><Select {...form.register("hasTrade")}><option value="false">No</option><option value="true">Si</option></Select></Field>
+        <Field label="Tiene permuta"><Select {...form.register("hasTrade")}><option value="INDIFERENTE">Indiferente</option><option value="SI">Sí</option><option value="NO">No</option></Select></Field>
         <Field label="% permuta"><Input type="number" {...form.register("tradePercent")} /></Field>
-        <Field label="Requiere apta credito"><Select {...form.register("needsCredit")}><option value="false">No</option><option value="true">Si</option></Select></Field>
+        <Field label="Requiere apta crédito"><Select {...form.register("needsCredit")}><option value="INDIFERENTE">Indiferente</option><option value="SI">Sí</option><option value="NO">No</option></Select></Field>
       </div>
       <div className="grid gap-4 md:grid-cols-4">
         <Field label="Dormitorios min."><Input type="number" {...form.register("bedrooms")} /></Field>

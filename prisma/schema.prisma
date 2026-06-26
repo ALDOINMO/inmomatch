@@ -97,7 +97,8 @@ model Property {
   latitude         Decimal?        @db.Decimal(10, 7)
   longitude        Decimal?        @db.Decimal(10, 7)
   description      String?
-  documentation    String?
+  documentation    DocumentationType?
+  documentationOther String?
   financing        Boolean         @default(false)
   financingPercent Int?            @map("financing_percent")
   acceptsTrade     Boolean         @default(false) @map("accepts_trade")
@@ -148,11 +149,11 @@ model Client {
   desiredTypes         PropertyType[] @map("desired_types")
   desiredCities        String[]       @map("desired_cities")
   desiredNeighborhoods String[]       @default([]) @map("desired_neighborhoods")
-  financingNeeded      Boolean        @default(false) @map("financing_needed")
+  financingNeeded      Preference     @default(INDIFERENTE) @map("financing_needed")
   financingPercent     Int?           @map("financing_percent")
-  hasTrade             Boolean        @default(false) @map("has_trade")
+  hasTrade             Preference     @default(INDIFERENTE) @map("has_trade")
   tradePercent         Int?           @map("trade_percent")
-  needsCredit          Boolean        @default(false) @map("needs_credit")
+  needsCredit          Preference     @default(INDIFERENTE) @map("needs_credit")
   requirements         Json           @default("{}")
   fieldRequirements    Json           @default("{}") @map("field_requirements")
   minMatchThreshold    Int            @default(70) @map("min_match_threshold")
@@ -318,4 +319,20 @@ enum EventType {
   REUNION
   LLAMADA
   TAREA
+}
+
+enum Preference {
+  INDIFERENTE
+  SI
+  NO
+}
+
+enum DocumentationType {
+  ESCRITURA
+  BOLETO_COMPRAVENTA
+  CESION_DERECHOS
+  SUCESION
+  POSESION
+  PRIMER_TESTIMONIO
+  OTRO
 }

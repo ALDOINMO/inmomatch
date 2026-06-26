@@ -65,6 +65,9 @@ department:
     documentation:
       data.documentation,
 
+      documentationOther:
+  data.documentationOther,
+
     financing:
   data.financing ===
   "true",

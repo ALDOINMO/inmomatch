@@ -30,7 +30,7 @@ export function PropertyForm({ property }: { property?: { id: string; [key: stri
         <Field label="Tipo de bien"><Select {...form.register("type")}><option>CASA</option><option>DEPARTAMENTO</option><option>TERRENO</option><option>CAMPO</option><option>LOCAL</option><option>OFICINA</option><option>CABANA</option><option>GALPON</option></Select></Field>
         <Field label="Valor"><Input type="number" {...form.register("price")} /></Field>
         <Field label="Moneda"><Select {...form.register("currency")}><option>USD</option><option>ARS</option></Select></Field>
-        <Field label="Documentacion"><Input {...form.register("documentation")} placeholder="Escritura, boleto, mensura..." /></Field>
+        <Field label="Documentación"><Select {...form.register("documentation")}><option value="">Seleccionar...</option><option value="ESCRITURA">Escritura</option><option value="BOLETO_COMPRAVENTA">Boleto de compraventa</option><option value="CESION_DERECHOS">Cesión de derechos</option><option value="SUCESION">Sucesión</option><option value="POSESION">Posesión</option><option value="PRIMER_TESTIMONIO">Primer testimonio</option><option value="OTRO">Otro</option></Select></Field>{form.watch("documentation")==="OTRO"&&<Field label="Detalle de la documentación"><Input {...form.register("documentationOther")} placeholder="Ej: Boleto con posesión, Cesión en trámite, Escritura en proceso..." /></Field>}
         <Field label="Direccion exacta"><Input {...form.register("address")} /></Field>
         <Field label="Localidad">
   <GeoRefLocalitySelect

@@ -77,13 +77,10 @@ if (
     "El barrio no esta dentro de las zonas buscadas."
   );
 }
-  if (client.financingNeeded && !property.financing) exclusions.push("El cliente necesita financiacion y la propiedad no la acepta.");
-  if (client.hasTrade && !property.acceptsTrade) exclusions.push("El cliente ofrece permuta y la propiedad no la acepta.");
-  if (client.hasTrade && property.acceptsTrade && client.tradePercent && property.tradePercent) {
-    const delta = Math.abs(client.tradePercent - property.tradePercent);
-    if (delta > 20) exclusions.push("La permuta supera la tolerancia de +-20%.");
-  }
-  if (client.needsCredit && features.creditReady !== true) exclusions.push("El cliente requiere apta credito y la propiedad no lo informa.");
+ if (client.financingNeeded === "SI" && !property.financing) exclusions.push("El cliente necesita financiación y la propiedad no la acepta."); if (client.financingNeeded === "NO" && property.financing) exclusions.push("El cliente no desea financiación.");
+ if (client.hasTrade === "SI" && !property.acceptsTrade) exclusions.push("El cliente ofrece permuta y la propiedad no la acepta."); if (client.hasTrade === "NO" && property.acceptsTrade) exclusions.push("El cliente no desea permuta.");
+ if (client.hasTrade === "SI" && property.acceptsTrade && client.tradePercent && property.tradePercent) { const delta = Math.abs(client.tradePercent - property.tradePercent); if (delta > 20) exclusions.push("La permuta supera la tolerancia de ±20%."); }
+ if (client.needsCredit === "SI" && features.creditReady !== true) exclusions.push("El cliente requiere apta crédito y la propiedad no lo informa."); if (client.needsCredit === "NO" && features.creditReady === true) exclusions.push("El cliente no desea propiedades aptas crédito.");
 
   if (property.type === "CAMPO") {
     if (!compareList(fieldRequirements.soilAptitude, fieldFeatures.soilAptitude)) {

@@ -60,22 +60,19 @@ function toClientData(
   data.desiredNeighborhoods ?? [],
 
     financingNeeded:
-  data.financingNeeded ===
-  "true",
+  data.financingNeeded,
 
     financingPercent:
       data.financingPercent,
 
     hasTrade:
-  data.hasTrade ===
-  "true",
+  data.hasTrade,
 
     tradePercent:
       data.tradePercent,
 
     needsCredit:
-  data.needsCredit ===
-  "true",
+  data.needsCredit,
 
     minMatchThreshold:
       data.minMatchThreshold,

@@ -22,11 +22,23 @@ export const clientSchema = z.object({
   desiredNeighborhoods: z
   .array(z.string())
   .default([]),
-  financingNeeded: z.enum(["true", "false"]).default("false"),
+  financingNeeded: z.enum([
+  "INDIFERENTE",
+  "SI",
+  "NO",
+]).default("INDIFERENTE"),
   financingPercent: z.coerce.number().int().min(0).max(100).optional(),
-  hasTrade: z.enum(["true", "false"]).default("false"),
+  hasTrade: z.enum([
+  "INDIFERENTE",
+  "SI",
+  "NO",
+]).default("INDIFERENTE"),
   tradePercent: z.coerce.number().int().min(0).max(100).optional(),
-  needsCredit: z.enum(["true", "false"]).default("false"),
+  needsCredit: z.enum([
+  "INDIFERENTE",
+  "SI",
+  "NO",
+]).default("INDIFERENTE"),
   minMatchThreshold: z.coerce.number().int().min(0).max(100).default(70),
   bedrooms: z.coerce.number().int().min(0).optional(),
   bathrooms: z.coerce.number().int().min(0).optional(),
